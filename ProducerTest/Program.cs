@@ -57,25 +57,22 @@ namespace ProducerTest
                     while (!tokenSource.IsCancellationRequested)
                     {
                         Thread.Sleep(1000);
-                        Task.Run(() =>
+                        for (var i = 0; i < 100; i++)
                         {
-                            for (var i = 0; i < 100; i++)
-                            {
-                                var ticks = DateTime.UtcNow.Ticks;
-                                topic.Produce(Encoding.UTF8.GetBytes(ticks.ToString()), partition: (int)(ticks % 2))
-                                    .ContinueWith(task =>
+                            var ticks = DateTime.UtcNow.Ticks;
+                            topic.Produce(Encoding.UTF8.GetBytes(ticks.ToString()), partition: (int)(ticks % 2))
+                                .ContinueWith(task =>
+                                {
+                                    if (task.Exception != null)
                                     {
-                                        if (task.Exception != null)
-                                        {
-                                            Console.WriteLine("{0}: Error publishing message - {1}", DateTime.Now.ToLongTimeString(), task.Exception);
-                                            return;
-                                        }
+                                        Console.WriteLine("{0}: Error publishing message - {1}", DateTime.Now.ToLongTimeString(), task.Exception);
+                                        return;
+                                    }
 
-                                        timer.Record((DateTime.UtcNow.Ticks - ticks) / 10000, TimeUnit.Milliseconds);
-                                        reports.Add(task.Result);
-                                    });
-                            }
-                        });
+                                    timer.Record((DateTime.UtcNow.Ticks - ticks) / 10000, TimeUnit.Milliseconds);
+                                    reports.Add(task.Result);
+                                });
+                        }
                     }
                     Console.WriteLine("Producer cancelled.");
                 }
