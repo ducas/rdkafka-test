@@ -16,7 +16,7 @@ namespace ProducerTest
 
         static string brokers;
 
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
             brokers = args.Length == 0 ? "192.168.33.50:9092" : args[0];
 
@@ -30,10 +30,16 @@ namespace ProducerTest
             StartProducer(tokenSource);
 
             var handle = new AutoResetEvent(false);
+            var cancelCount = 0;
             Console.CancelKeyPress += (s, e) =>
             {
+                cancelCount++;
+                if (cancelCount == 2) return;
+
                 tokenSource.Cancel();
                 handle.Set();
+
+                e.Cancel = true;
             };
             handle.WaitOne();
 
@@ -41,17 +47,29 @@ namespace ProducerTest
 
             WritePublished();
 
-            return 0;
+            Environment.Exit(0);
         }
 
         static List<DeliveryReport> reports = new List<DeliveryReport>();
-        private static void StartProducer(CancellationTokenSource tokenSource)
+        private static Thread StartProducer(CancellationTokenSource tokenSource)
         {
             var timer = Metric.Timer("Published", Unit.Events);
 
-            new Thread(() =>
+            var thread = new Thread(() =>
             {
-                using (var publisher = new Producer(brokers))
+                var topicConfig = new TopicConfig();
+                topicConfig["request.required.acks"] = "0"; // Don't require an ack from the broker.
+                var config = new Config
+                {
+                    GroupId = consumerGroupName,
+                    EnableAutoCommit = true,
+                    StatisticsInterval = TimeSpan.FromSeconds(10),
+                    DefaultTopicConfig = topicConfig
+                };
+                config["socket.blocking.max.ms"] = "1"; // Maximum time a broker socket operation may block.
+                config["queue.buffering.max.ms"] = "1"; // Maximum time to buffer data when using async mode.
+
+                using (var publisher = new Producer(config, brokers))
                 using (var topic = publisher.Topic(topicName))
                 {
                     while (!tokenSource.IsCancellationRequested)
@@ -75,8 +93,12 @@ namespace ProducerTest
                         }
                     }
                     Console.WriteLine("Producer cancelled.");
+                    Thread.CurrentThread.Abort();
                 }
-            }).Start();
+            });
+            thread.Start();
+
+            return thread;
         }
 
         private static void WritePublished()
