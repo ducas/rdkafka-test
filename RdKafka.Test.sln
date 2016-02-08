@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatencyTest", "LatencyTest\LatencyTest.csproj", "{1FFE515A-70C6-4790-8537-6DA1CCC91D86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerTest", "ProducerTest\ProducerTest.csproj", "{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{1FFE515A-70C6-4790-8537-6DA1CCC91D86}.Release|x64.Build.0 = Release|x64
 		{1FFE515A-70C6-4790-8537-6DA1CCC91D86}.Release|x86.ActiveCfg = Release|x86
 		{1FFE515A-70C6-4790-8537-6DA1CCC91D86}.Release|x86.Build.0 = Release|x86
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|x64.Build.0 = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Debug|x86.Build.0 = Debug|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|x64.ActiveCfg = Release|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|x64.Build.0 = Release|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|x86.ActiveCfg = Release|Any CPU
+		{A8F60669-8AA0-4810-AA2E-6DF99AFB6FFB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
